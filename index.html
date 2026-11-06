@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c0d10">
+<title>Una carta para ti</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="bg"></div>
+<canvas id="sky"></canvas>
+<div id="glow"></div>
+<div id="grain"></div>
+<canvas id="fx"></canvas>
+
+<main>
+  <section class="intro" id="intro">
+    <div class="kicker" id="kicker"></div>
+    <h1>Hay algo para ti</h1>
+    <button class="open" id="openBtn">abrir carta</button>
+  </section>
+
+  <div class="paper-wrap" id="wrap">
+    <div class="halo" id="halo"></div>
+    <article class="sheet" id="sheet"></article>
+    <div class="sweep" id="sweep"><i></i></div>
+  </div>
+
+  <nav class="nav" id="nav">
+    <button id="prev">← día anterior</button>
+    <button id="next">día siguiente →</button>
+  </nav>
+</main>
+
+<div class="hint" id="hint">♪ toca cualquier parte para activar la música</div>
+<button class="music" id="musicBtn" aria-label="Activar o silenciar música">♪</button>
+
+<script src="script.js"></script>
+</body>
+</html>
