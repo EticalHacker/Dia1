@@ -13,7 +13,6 @@ body{
 }
 ::selection{background:rgba(255,200,130,.35)}
 
-/* ===== cielo: la luz llena la pantalla poco a poco ===== */
 #bg{position:fixed;inset:0;z-index:0;background:#0c0d10}
 #sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #glow{
@@ -32,7 +31,6 @@ main{
   padding:56px 22px 110px;
 }
 
-/* ===== portada ===== */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .intro{text-align:center;transition:opacity .8s ease, transform .8s ease}
 .intro > *{animation:rise 1.6s ease both}
@@ -50,7 +48,6 @@ main{
 .open:hover{border-color:rgba(232,223,208,.8);background:rgba(232,223,208,.08);letter-spacing:.26em}
 .open:focus-visible{outline:1px solid #e8dfd0;outline-offset:4px}
 
-/* ===== la carta (hoja de papel) ===== */
 .paper-wrap{
   display:none;position:relative;width:100%;max-width:620px;
   transform:rotate(-.6deg);
@@ -99,7 +96,6 @@ main{
 .nav button:hover:not(:disabled){color:#fff;border-color:rgba(255,255,255,.4)}
 .nav button:disabled{opacity:.3;cursor:default}
 
-/* ===== música ===== */
 .music{
   position:fixed;right:18px;bottom:18px;z-index:7;
   background:rgba(12,13,16,.55);color:var(--dim);

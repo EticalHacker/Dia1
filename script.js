@@ -1,13 +1,9 @@
-/* =====================================================
-   CONFIGURACIÓN — aquí editas todo
-   ===================================================== */
 const CONFIG = {
   music: 'ASSETS/musica.mp3',
   volume: 0.30,
-  sunriseSeconds: 14       // cuánto tarda la luz en llenar la pantalla
+  sunriseSeconds: 14
 };
 
-/* Una entrada por día. date = desde cuándo se desbloquea (AAAA-MM-DD). */
 const LETTERS = [
   {
     day: 1,
@@ -18,11 +14,7 @@ const LETTERS = [
     ],
     sign: ''
   }
-  /* ejemplo para mañana:
-  ,{ day: 2, date: '2026-11-06', paragraphs: ['...'], sign: '— [tu nombre]' }
-  */
 ];
-/* ===================================================== */
 
 const $ = id => document.getElementById(id);
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -52,9 +44,6 @@ function fillSheet(letter){
   if (letter.sign) add(letter.sign, 'sign');
 }
 
-/* =====================================================
-   Destellos (partículas de luz al encajar cada pedazo)
-   ===================================================== */
 const fxCv = $('fx'), fxCtx = fxCv.getContext('2d');
 let parts = [], fxRun = false, fxDpr = 1;
 function fxResize(){
@@ -89,9 +78,6 @@ function fxLoop(now){
   else { fxRun = false; fxCtx.clearRect(0, 0, fxCv.width, fxCv.height); }
 }
 
-/* =====================================================
-   La hoja se rompe y se reconstruye como atraída por un imán
-   ===================================================== */
 let busy = false;
 
 function polyArea(pts){
@@ -120,7 +106,6 @@ function assemble(){
   layer.className = 'shards';
   wrap.appendChild(layer);
 
-  /* --- trozos de forma y tamaño aleatorios (celdas de Voronoi): encajan exacto --- */
   const target = innerWidth < 600 ? 34 : 56;
   const minD = Math.sqrt(W * H / target) * .32;
   const seeds = [];
@@ -150,7 +135,6 @@ function assemble(){
     return poly;
   }).filter(p => p.length >= 3);
 
-  /* --- animación de cada pedazo --- */
   const reach = Math.max(innerWidth, innerHeight);
   const T = (x, y, r, s) => `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${r.toFixed(1)}deg) scale(${s.toFixed(3)})`;
   const SH = (blur, alpha, col, b) => `drop-shadow(0 ${(blur/2).toFixed(1)}px ${blur}px rgba(${col},${alpha})) brightness(${b})`;
@@ -175,20 +159,18 @@ function assemble(){
     outer.appendChild(inner);
     layer.appendChild(outer);
 
-    /* velocidad: unos llegan rápido, otros lentos, como atraídos con distinta fuerza */
     const k = Math.random();
     const dur = k < .28 ? 1900 + Math.random()*900
               : k < .78 ? 3000 + Math.random()*1300
               :           4300 + Math.random()*1200;
     const dn = Math.hypot(gx - W/2, gy - H/2) / Math.hypot(W/2, H/2);
-    const delay = (Math.random() * .6 + dn * .4) * 1700;   // el centro tiende a atraerse primero
+    const delay = (Math.random() * .6 + dn * .4) * 1700;
 
-    /* trayectoria curva */
     const ang = Math.random() * 6.283;
     const dist = reach * (.4 + Math.random() * .5);
     const sx = Math.cos(ang) * dist, sy = Math.sin(ang) * dist;
-    const ux = -Math.cos(ang), uy = -Math.sin(ang);       // hacia su lugar
-    const px = -uy, py = ux;                               // perpendicular
+    const ux = -Math.cos(ang), uy = -Math.sin(ang);
+    const px = -uy, py = ux;
     const curv = (Math.random() - .5) * dist * .9;
     const R0 = (Math.random() - .5) * 620, s0 = .45 + Math.random() * 1.1;
     const ov = 6 + Math.random() * 10, un = 2 + Math.random() * 3;
@@ -210,10 +192,8 @@ function assemble(){
     items.push({ outer, anim, land, gx, gy, area: polyArea(pts) });
   });
 
-  /* los que llegan más tarde quedan por encima de los que ya llegaron */
   items.slice().sort((a, b) => a.land - b.land).forEach((it, i) => { it.outer.style.zIndex = i + 1; });
 
-  /* destello al encajar cada pedazo */
   items.forEach(it => {
     setTimeout(() => {
       const r = wrap.getBoundingClientRect();
@@ -222,7 +202,6 @@ function assemble(){
     }, it.land);
   });
 
-  /* aura de luz que crece mientras la carta se forma */
   halo.getAnimations().forEach(a => a.cancel());
   halo.animate([{ opacity: 0 }, { opacity: .85, offset: .82 }, { opacity: .45 }],
                { duration: totalMs, easing: 'ease-in', fill: 'forwards' });
@@ -236,7 +215,6 @@ function assemble(){
       busy = false;
     });
 
-    /* remate: pulso de luz, barrido brillante sobre el papel y pequeño asentamiento */
     halo.animate([{ opacity: .45 }, { opacity: 1, offset: .25 }, { opacity: .42 }],
                  { duration: 2200, easing: 'ease-out', fill: 'forwards' });
     sweep.animate([
@@ -267,7 +245,6 @@ function showLetter(i){
   requestAnimationFrame(assemble);
 }
 
-/* ---------- portada ---------- */
 if (!unlocked.length){
   document.querySelector('.intro h1').textContent = 'Todavía no es el momento';
   $('openBtn').style.display = 'none';
@@ -281,7 +258,6 @@ $('openBtn').addEventListener('click', () => {
 $('prev').addEventListener('click', () => { if (!busy && current > 0){ current--; showLetter(current); } });
 $('next').addEventListener('click', () => { if (!busy && current < unlocked.length-1){ current++; showLetter(current); } });
 
-/* ---------- música: intenta sonar sola ---------- */
 const audio = new Audio(CONFIG.music);
 audio.loop = true; audio.preload = 'auto'; audio.volume = CONFIG.volume;
 let wantMusic = true;
@@ -307,14 +283,13 @@ $('musicBtn').addEventListener('click', e => {
 audio.addEventListener('error', () => { $('musicBtn').style.display = 'none'; $('hint').classList.remove('show'); });
 (async () => { if (!(await tryPlay())){ updateBtn(); armFallback(); } })();
 
-/* ---------- la luz llena la pantalla + estrellas ---------- */
 (function dawn(){
   const ease = t => t < .5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
   const bg = $('bg'), glow = $('glow'), sky = $('sky');
   const start = performance.now();
 
   function apply(p){
-    const H = Math.max(1, -8 + 190 * p);            // hasta dónde llega la luz (% de la pantalla)
+    const H = Math.max(1, -8 + 190 * p);
     const k = Math.min(1, p * 1.6);
     const a = x => (x * k).toFixed(3);
     bg.style.background =
